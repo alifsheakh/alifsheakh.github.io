@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Publications — Md. Alif Sheakh</title>
+<meta name="description" content="Publications of Md. Alif Sheakh with live citation counts from OpenAlex.">
+<meta property="og:title" content="Publications — Md. Alif Sheakh"><meta property="og:description" content="Publications of Md. Alif Sheakh with live citation counts from OpenAlex.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="ph"><div class="wrap">
+  <div class="crumb"><b>(03)</b> Publications</div>
+  <h1 class="rv">Papers &amp; <i>citations</i></h1>
+  <p class="rv d1">Journal articles, conference papers and book chapters. The list and every citation count update automatically from OpenAlex.</p>
+</div></header>
+<main class="wrap">
+  <div class="pub-grid">
+    <div class="strip" style="grid-template-columns:1fr 1fr;border-bottom:0">
+      <div><b id="n-cites">618</b><span>Citations</span></div>
+      <div><b id="n-h">13</b><span>h-index</span></div>
+    </div>
+    <div><div class="chart" id="chart"></div><div class="chart-x" id="chartx"></div><p class="note">Citations per year · <span id="sync">Connecting to OpenAlex…</span></p></div>
+  </div>
+  <div class="tabs" role="group" aria-label="Filter">
+    <button data-f="all" aria-pressed="true">All<sup data-c="all"></sup></button>
+    <button data-f="journal" aria-pressed="false">Journals<sup data-c="journal"></sup></button>
+    <button data-f="conference" aria-pressed="false">Conferences<sup data-c="conference"></sup></button>
+    <button data-f="chapter" aria-pressed="false">Chapters<sup data-c="chapter"></sup></button>
+    <button data-f="first" aria-pressed="false">First author<sup data-c="first"></sup></button>
+  </div>
+  <div class="tools-row"><input id="q" type="search" placeholder="Search title, venue or co-author" aria-label="Search"><select id="sort" aria-label="Sort"><option value="year">Newest first</option><option value="cites">Most cited</option></select></div>
+  <div id="list"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  <p class="note" style="margin:30px 0 90px">Counts from <a href="https://openalex.org" target="_blank" rel="noopener" style="color:var(--orange)">OpenAlex</a>; they may differ slightly from <a id="gs" target="_blank" rel="noopener" style="color:var(--orange)">Google Scholar</a>.</p>
+</main>
+<script src="assets/main.js"></script>
+<script src="assets/pubs.js"></script>
+<script>
+document.getElementById("gs").href = PROFILE.scholar;
+const TL = {journal:"Journal",conference:"Conference",chapter:"Chapter",review:"Under review",preprint:"Preprint"};
+let DATA=[], f="all", q="", sort="year", first=true;
+const ok = p => (f==="all" || (f==="first" ? isFirst(p)&&p.type!=="review" : p.type===f)) && (!q || (p.title+" "+p.venue+" "+p.authors.join(" ")).toLowerCase().includes(q));
+function src(p){
+  if(p.type==="review") return "Manuscript under review";
+  let s=(p.type==="chapter"?"In ":"")+`<i>${esc(p.venue)}</i>`;
+  if(p.volume) s+=`, ${esc(p.volume)}`; if(p.issue) s+=`(${esc(p.issue)})`; if(p.pages) s+=`, ${esc(p.pages)}`;
+  return s+`, ${p.year}.`;
+}
+function item(p,n){ return `<article class="pe rv">
+  <div class="ix">${String(n).padStart(2,"0")}</div>
+  <div>
+    <h3>${p.doi?`<a href="https://doi.org/${p.doi}" target="_blank" rel="noopener">${esc(p.title)}</a>`:esc(p.title)}</h3>
+    <p class="au">${authorsHtml(p.authors,30)}</p>
+    <p class="src">${src(p)}</p>
+    <div class="ac"><span class="ty ${p.type}">${TL[p.type]}</span>${isFirst(p)&&p.type!=="review"?'<span class="ty first">First author</span>':''}
+      ${p.abstract?'<button class="ab" data-p="abs" aria-expanded="false">Abstract</button>':''}
+      ${p.type!=="review"?'<button class="ab" data-p="cite" aria-expanded="false">Cite</button>':''}
+      ${p.doi?`<a class="ab" href="https://doi.org/${p.doi}" target="_blank" rel="noopener">DOI ↗</a>`:''}
+      ${p.oa?`<a class="ab oa" href="${esc(p.oa)}" target="_blank" rel="noopener">Free PDF ↗</a>`:''}</div>
+    ${p.abstract?`<div class="pnl" data-for="abs">${esc(p.abstract)}</div>`:''}
+    ${p.type!=="review"?`<div class="pnl" data-for="cite"><div class="h"><h5>APA 7</h5><button class="ab" data-copy="apa">Copy</button></div><pre data-src="apa">${apa(p)}</pre><div class="h"><h5>BIBTEX</h5><button class="ab" data-copy="bib">Copy</button></div><pre data-src="bib">${esc(bibtex(p))}</pre></div>`:''}
+  </div>
+  <div class="cn">${p.cites!=null?`<b>${p.cites}</b><span>CITED BY</span>`:''}</div></article>`; }
+function draw(){
+  document.querySelectorAll("[data-c]").forEach(el=>{ const k=el.dataset.c; el.textContent=DATA.filter(p=>k==="all"?true:k==="first"?isFirst(p)&&p.type!=="review":p.type===k).length; });
+  const V=DATA.filter(ok), L=document.getElementById("list");
+  if(!V.length){ L.innerHTML='<p style="padding:40px 0;color:var(--muted)">Nothing matches.</p>'; return; }
+  const pub=DATA.filter(p=>p.type!=="review").slice().sort((a,b)=>a.year-b.year||a.title.localeCompare(b.title));
+  const num=p=> p.type==="review" ? "R" : pub.indexOf(p)+1;
+  if(sort==="cites"){ L.innerHTML=V.slice().sort((a,b)=>(b.cites??-1)-(a.cites??-1)).map(p=>item(p,num(p))).join(""); }
+  else{
+    const g={}; V.forEach(p=>{ const k=p.type==="review"?"Under review":String(p.year); (g[k]=g[k]||[]).push(p); });
+    L.innerHTML=Object.keys(g).sort((a,b)=>a==="Under review"?-1:b==="Under review"?1:b-a)
+      .map(k=>`<h2 class="yrh rv">${k}<small>${g[k].length} paper${g[k].length>1?"s":""}</small></h2>`+g[k].sort((a,b)=>num(b)-num(a)).map(p=>item(p,num(p))).join("")).join("");
+  }
+  reveal(L);
+}
+document.getElementById("list").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return; const c=b.closest(".pe");
+  if(b.dataset.p){ const pn=c.querySelector(`.pnl[data-for="${b.dataset.p}"]`), open=!pn.classList.contains("open");
+    c.querySelectorAll(".pnl").forEach(x=>x.classList.remove("open")); c.querySelectorAll("[data-p]").forEach(x=>x.setAttribute("aria-expanded","false"));
+    if(open){ pn.classList.add("open"); b.setAttribute("aria-expanded","true"); } }
+  if(b.dataset.copy){ const t=c.querySelector(`pre[data-src="${b.dataset.copy}"]`).textContent;
+    const done=()=>{ b.textContent="Copied ✓"; setTimeout(()=>b.textContent="Copy",1500); };
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done,()=>{});
+    else{ const ta=document.createElement("textarea"); ta.value=t; document.body.append(ta); ta.select(); try{document.execCommand("copy");done();}catch(_){} ta.remove(); } }
+});
+function chart(rows){
+  rows=(rows||[]).filter(r=>r.cites>0).sort((a,b)=>a.year-b.year);
+  const C=document.getElementById("chart"), X=document.getElementById("chartx");
+  if(rows.length<2){ C.parentElement.style.display="none"; return; }
+  C.parentElement.style.display=""; const m=Math.max(...rows.map(r=>r.cites));
+  C.innerHTML=rows.map((r,i)=>`<div class="c"><b>${r.cites}</b><i style="height:${Math.max(3,r.cites/m*88)}px;animation-delay:${i*.08}s"></i></div>`).join("");
+  X.innerHTML=rows.map(r=>`<span>${r.year}</span>`).join("");
+}
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{ document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-pressed","false")); b.setAttribute("aria-pressed","true"); f=b.dataset.f; draw(); });
+document.getElementById("q").oninput=e=>{ q=e.target.value.trim().toLowerCase(); draw(); };
+document.getElementById("sort").onchange=e=>{ sort=e.target.value; draw(); };
+loadPublications((d,mode)=>{
+  DATA=d.pubs; draw(); chart(d.stats.byYear);
+  const s=d.stats, set=(id,v)=>{ const el=document.getElementById(id); if(v==null) return; el.dataset.from=first?0:(parseInt(el.textContent.replace(/,/g,""))||0); countTo(el,v); };
+  set("n-cites",s.citations); set("n-h",s.h); first=false;
+  document.getElementById("sync").textContent=syncLabel(mode,d.at);
+});
+</script>
+</body>
+</html>

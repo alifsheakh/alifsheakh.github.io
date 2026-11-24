@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — Md. Alif Sheakh</title>
+<meta name="description" content="Contact Md. Alif Sheakh.">
+<meta property="og:title" content="Contact — Md. Alif Sheakh"><meta property="og:description" content="Contact Md. Alif Sheakh.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="ph"><div class="wrap">
+  <div class="crumb"><b>(05)</b> Contact</div>
+  <h1 class="rv">Say <i>hello</i></h1>
+  <p class="rv d1">For research collaborations, co-authorship, reviewing or editorial matters, email is the best way to reach me.</p>
+</div></header>
+<main class="wrap" style="padding:60px 32px 100px"><div class="clist" id="cl"></div></main>
+<script src="assets/main.js"></script>
+<script src="assets/pubs.js"></script>
+<script>
+const L=[["Email",PROFILE.email,"mailto:"+PROFILE.email],["Google Scholar","Citations",PROFILE.scholar],["ORCID","0009-0006-5845-5210",PROFILE.orcid],["IEEE Xplore","Author profile",PROFILE.ieee],["ResearchGate","Md-Alif-Sheakh",PROFILE.researchgate],["LinkedIn","in/alifsheakh",PROFILE.linkedin],["GitHub","alifsheakh",PROFILE.github]];
+document.getElementById("cl").innerHTML=L.map(([t,s,h])=>`<a class="cl rv" href="${h}" ${h.startsWith("mailto")?"":'target="_blank" rel="noopener"'}><span class="t">${t}</span><span class="s">${s} ↗</span></a>`).join("");
+reveal();
+</script>
+</body>
+</html>

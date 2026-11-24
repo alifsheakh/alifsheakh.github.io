@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research — Md. Alif Sheakh</title>
+<meta name="description" content="Research areas of Md. Alif Sheakh: medical image analysis, explainable AI, clinical machine learning, federated learning, graph neural networks.">
+<meta property="og:title" content="Research — Md. Alif Sheakh"><meta property="og:description" content="Research areas of Md. Alif Sheakh: medical image analysis, explainable AI, clinical machine learning, federated learning, graph neural networks.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="ph"><div class="wrap">
+  <div class="crumb"><b>(02)</b> Research</div>
+  <h1 class="rv">What I <i>work</i> on</h1>
+  <p class="rv d1">My work sits where machine learning meets medicine: models that read medical images and clinical data accurately, explain their reasoning, and generalise across datasets.</p>
+</div></header>
+<main class="wrap">
+  <div class="rd rv" id="imaging"><div class="n">01</div>
+    <div><h3>Medical image analysis</h3><p>New and optimised deep architectures for diagnosis from images: a multi-dataset vision transformer (MViTX), a gated MLP for endometrial cancer histopathology (ECgMLP), attention-based transfer learning for X-ray, hybrid transfer learning for brain tumours, and CNN ensembles for knee radiographs.</p>
+      <div class="tags"><span class="tag">Vision transformers</span><span class="tag">Gated MLP</span><span class="tag">Attention</span><span class="tag">Transfer learning</span><span class="tag">CNN ensembles</span></div></div>
+    <ul class="papers" data-q="mvitx|ecgmlp|x-ray|brain tumor|knee"></ul></div>
+  <div class="rd rv" id="xai"><div class="n">02</div>
+    <div><h3>Explainable AI</h3><p>Explainability is built into my models, not bolted on, so that clinicians can see which regions or features drove a decision. It runs through MViTX, FedVGM, the knee radiograph ensemble and breast cancer prediction.</p>
+      <div class="tags"><span class="tag">Saliency &amp; heatmaps</span><span class="tag">Feature attribution</span><span class="tag">Trustworthy AI</span></div></div>
+    <ul class="papers" data-q="explainable|xai"></ul></div>
+  <div class="rd rv" id="ml"><div class="n">03</div>
+    <div><h3>Clinical machine learning</h3><p>Optimised machine-learning pipelines for disease prediction from clinical data, with feature selection, Bayesian and hyperparameter optimisation and ensembles. Applications include heart attack (ECG), liver disease, thyroid, hepatitis C, Parkinson’s, eye disease, and maternal and fetal health.</p>
+      <div class="tags"><span class="tag">Ensembles</span><span class="tag">Bayesian optimisation</span><span class="tag">Feature engineering</span></div></div>
+    <ul class="papers" data-q="heart attack|liver|thyroid|hepatitis|parkinson|maternal|fetal"></ul></div>
+  <div class="rd rv" id="privacy"><div class="n">04</div>
+    <div><h3>Federated &amp; robust learning</h3><p>Training across multiple medical datasets without pooling patient data (FedVGM), and multiscale models that close the gap between validation performance and real clinical deployment, as in EEG seizure detection.</p>
+      <div class="tags"><span class="tag">Federated learning</span><span class="tag">Multi-dataset</span><span class="tag">Deployment</span></div></div>
+    <ul class="papers" data-q="federated|seizure"></ul></div>
+  <div class="rd rv" id="next"><div class="n">05</div>
+    <div><h3>Graphs, attention &amp; 3D data</h3><p>My current interests extend to graph neural networks, attention-based architectures and 3D data analysis for medical decision support, modelling structure and relationships that flat images miss.</p>
+      <div class="tags"><span class="tag">Graph neural networks</span><span class="tag">Attention</span><span class="tag">3D imaging</span><span class="tag">Decision support</span></div></div>
+    <ul><li>Interest area: see publications as they appear.</li></ul></div>
+  <div class="rd rv" id="beyond"><div class="n">06</div>
+    <div><h3>Beyond medicine</h3><p>The same toolkit applied to agriculture (rice and lemon leaf disease), language (Bangla and e-commerce sentiment) and autonomous-vehicle security.</p>
+      <div class="tags"><span class="tag">Plant disease</span><span class="tag">NLP</span><span class="tag">Cyber-physical security</span></div></div>
+    <ul class="papers" data-q="leaf|sentiment|autonomous"></ul></div>
+</main>
+<section class="closing"><div class="wrap"><a class="big rv" href="publications.html">All <i>papers</i> <span>→</span></a></div></section>
+<script src="assets/main.js"></script>
+<script src="assets/pubs.js"></script>
+<script>
+loadPublications(d => {
+  document.querySelectorAll("ul.papers").forEach(ul => {
+    const re = new RegExp(ul.dataset.q, "i");
+    const ps = d.pubs.filter(p => re.test(p.title)).sort((a,b)=>b.year-a.year).slice(0,4);
+    ul.innerHTML = ps.map(p => `<li><a href="${p.doi?'https://doi.org/'+p.doi:'publications.html'}" target="_blank" rel="noopener">${esc(p.title)}</a> <span class="mono" style="color:var(--muted);font-size:12px">· ${p.year}</span>${p.cites!=null?`<span class="cc">${p.cites} cites</span>`:''}</li>`).join("");
+  });
+});
+</script>
+</body>
+</html>
